@@ -1,0 +1,493 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Seva"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="Seva.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="800" Loaded="Window_Loaded" ResizeMode="NoResize" WindowStyle="None" Background="#2A2A2A">
+    <WindowChrome.WindowChrome >
+        <WindowChrome/>
+    </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="CaretBrush" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+            <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
+        </ControlTemplate>
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Border
+                  x:Name="Border" 
+                  Grid.ColumnSpan="2"
+                  CornerRadius="5"
+                  Background="#FF3F3F3F"
+                  BorderBrush="Transparent"
+                  BorderThickness="0" />
+                <Border 
+                  Grid.Column="0"
+                  CornerRadius="5" 
+                  Margin="1" 
+                  Background="#FF3F3F3F" 
+                  BorderBrush="Transparent"
+                  BorderThickness="0" />
+                <Path 
+                  x:Name="Arrow"
+                  Grid.Column="1"     
+                  Fill="White"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Data="M 0 0 L 4 4 L 8 0 Z"
+                  Width="10"
+                />
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+            <!--<ControlTemplate.Triggers>
+            <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                <Setter TargetName="Border" Property="Background" Value="#808080" />
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="true">
+                <Setter TargetName="Border" Property="Background" Value="#E0E0E0" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                <Setter Property="Foreground" Value="#888888"/>
+                <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
+            </Trigger>
+        </ControlTemplate.Triggers>-->
+        </ControlTemplate>
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem" >
+                        <Grid Name="Panel" Background="#636363">
+                            
+                            <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2" 
+                                        />
+
+                        </Grid>
+                        
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Panel" Property="Background" Value="#2A2A2A" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Panel" Property="Background" Value="#636363" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="True">
+                                <Setter Property="TextBlock.Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="MinWidth" Value="50"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid>
+                            <ToggleButton 
+                            Name="ToggleButton" 
+                            Template="{StaticResource ComboBoxToggleButton}" 
+                            Grid.Column="2" 
+                            Focusable="True"
+                            IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                            ClickMode="Press">
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False"  Content="{TemplateBinding SelectionBoxItem}"
+                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                            Margin="3,3,23,3"
+                                             
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left" />
+                            <TextBox x:Name="PART_EditableTextBox"
+                            Style="{x:Null}" 
+                            Template="{StaticResource ComboBoxTextBox}" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Center" 
+                            Margin="3,3,23,3"
+                            Focusable="True" 
+                            Background="#FF3F3F3F"
+                            Foreground="Green"
+                            Visibility="Hidden"
+                            IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                            <Popup 
+                            Name="Popup"
+                            Placement="Bottom"
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            AllowsTransparency="True" 
+                            Focusable="True"
+                            PopupAnimation="Slide">
+
+                                <Grid Name="DropDown"
+                              SnapsToDevicePixels="True"                
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border 
+                                x:Name="DropDownBorder"
+                                Background="#FF3F3F3F"
+                                CornerRadius="5"
+                                BorderThickness="0"
+                                BorderBrush="Transparent"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                                <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0"/>
+                                <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable"  Value="true">
+                                <Setter Property="IsTabStop" Value="false"/>
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type DataGridColumnHeader}" x:Key="columnheaders">
+            <Setter Property="Background" Value="#2A2A2A" />
+        </Style>
+        <Style TargetType="{x:Type DataGridRowHeader}" x:Key="rowheaders">
+            <Setter Property="Background" Value="#2A2A2A" />
+        </Style>
+        <Style x:Key="exit" TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+    
+    <Grid Background="Transparent" Name="LayoutRoot" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="260"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="40" Margin="0,0,0,0" Click="Min">
+                <Image  Width="10" Height="10" Source="/min.png" />
+            </Button>
+            <Button BorderThickness="0" Click="Exits" Background="#2A2A2A" Foreground="White" Width="40" Style="{DynamicResource exit}">
+                <Image Source="/exit.png" Width="10" Height="10" />
+            </Button>
+        </StackPanel>
+        <Grid x:Name="GridNavbar" Margin="10,10,10,10" Grid.Row="2" Grid.Column="1" >
+
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
+                <Label Content="" x:Name="usedata" FontSize="25" Margin="0,0,20,0" Foreground="White"/>
+                <ComboBox Grid.Column="0" Width="130" Grid.Row="1" SelectedIndex="1" Name="MenuLimitBox" VerticalAlignment="Center" Margin="0,0,10,0" Loaded="Limited" Background="#333333" >
+
+                </ComboBox>
+                <ComboBox Grid.Column="0" Width="130" Grid.Row="1" SelectedIndex="1" Name="MenuTableBox" VerticalAlignment="Center" Loaded="MenuTableBox_loaded" SelectionChanged="MenuTableBox_SelectionChanged" >
+
+                </ComboBox>
+                <Button Width="25" VerticalAlignment="Center" Height="25" Margin="10,0,0,0"  Click="UpdateData" HorizontalAlignment="Center" BorderThickness="0">
+                    <Button.ToolTip>
+                        <ToolTip>Update this table</ToolTip>
+                    </Button.ToolTip>
+                    <Button.Background>
+                        <ImageBrush Stretch="Fill" ImageSource="/refresh.png" />
+                    </Button.Background>
+                </Button>
+                <Button Width="25" VerticalAlignment="Center" Height="25" Margin="10,0,0,0" BorderThickness="0" Click="RemoveData" HorizontalAlignment="Center">
+                    <Button.ToolTip>
+                        <ToolTip>Remove this table</ToolTip>
+                    </Button.ToolTip>
+                    <Button.Background>
+                        <ImageBrush Stretch="Fill" ImageSource="/delete.png" />
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+        </Grid>
+        
+        <Grid Grid.Row="3" Grid.RowSpan="2" Grid.Column="1" Margin="10">
+
+            <DataGrid CanUserAddRows="True" CanUserDeleteRows="True" CanUserResizeRows="True" AutoGenerateColumns="True" Name="DataGridCustom" BorderThickness="0"  RowHeaderStyle="{DynamicResource rowheaders}" ColumnHeaderStyle="{DynamicResource columnheaders}" Background="#2A2A2A" Foreground="White" >
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="#2A2A2A"/>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="#2A2A2A"/>
+                    </Style>
+                </DataGrid.CellStyle>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="2"  Grid.Column="3" Grid.RowSpan="3" Margin="10" Background="#333333">
+
+
+            <Grid Margin="20" >
+                <TabControl Margin="0,0,0,0" Background="#4A4A4A" BorderThickness="0" >
+                    <TabItem GotFocus="TabItem_GotFocus_2" x:Name ="InsertTab">
+                        <TabItem.Header>
+
+                            <TextBlock>Вставка</TextBlock>
+                        </TabItem.Header>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.RowSpan="2">
+                            <Label FontSize="17" Content="Таблица" Margin="0 5 5 1" Foreground="White"/>
+                            <TextBox x:Name="NameTable" MaxLength="64" Width="150" Background="Transparent" Foreground="White" BorderThickness="0,0,0,1" />
+                            <Button x:Name="Searchcolumn" Background="#2a2a2a" Foreground="White" BorderThickness="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="15" Height="28" Content="Показать поля" Width="150" Click="Search" Margin="0,10,0,0" />
+
+                            <Label FontSize="17" Content="Поля" Margin="0 5 5 1" Foreground="White"/>
+                            <ListBox x:Name="CreateColumn" Background="#2A2A2A" BorderThickness="0" Margin="0,5,0,0" Height="146" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                            </ListBox>
+                            <Button Name="added" Content="Добавить" Foreground="White" Background="#2A2A2A" BorderThickness="0" Height="30" FontSize="15" Click="Insert_Click"/>
+                        </StackPanel>
+
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <TextBlock>Триггеры</TextBlock>
+                        </TabItem.Header>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center"  Grid.RowSpan="2">
+                            <Label FontSize="11pt" Content="Триггеры" Margin="0 5 5 1" Foreground="White" />
+                            <StackPanel Orientation="Horizontal">
+                                <ListBox x:Name="eventsListName" Loaded="eventsList_Loaded" Height="255" BorderThickness="0" Width="170" Background="#2A2A2A" Foreground="White" Margin="0,0,0,0" SelectionChanged="eventsListName_SelectionChanged">
+
+                                </ListBox>
+                            </StackPanel>
+                            
+                            <Button x:Name="eventsend" Click="eventsend_Click" Content="Создать триггер" Foreground="White" BorderThickness="0" FontSize="15" Background="#2A2A2A" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem Loaded="TabItem_Loaded" x:Name="UpdateTab">
+                        <TabItem.Header>
+                            <TextBlock>Изменение</TextBlock>
+                        </TabItem.Header>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.RowSpan="2" >
+                            <Label FontSize="15" Content="Таблица" Margin="0 0 0 0" BorderThickness="0"  Foreground="White"/>
+                            <ComboBox Name="UpdateSearchTable" SelectionChanged="UpdateSearchTable_SelectionChanged"/>
+                            <!--<TextBox x:Name="UpdateSearchTable" MaxLength="64" BorderThickness="0,0,0,1" Width="150" Background="Transparent" Foreground="White"/>-->
+                            <Button HorizontalAlignment="Center" Content="Показать поля" FontSize="15" Height="28" Width="150" Margin="0,10,0,0" Click="UpdateSearchColumn" BorderThickness="0" Background="#2A2A2A" Foreground="White"/>
+                            <Label FontSize="15" Content="Поиск по полю" Margin="0 0 0 0" BorderThickness="0" Foreground="White"/>
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox Name="columntable" SelectedIndex="0" SelectionChanged="columntable_Selected"/>
+                                <ComboBox Name="operatorstable" SelectedIndex="0">
+                                    <ComboBoxItem Content="="/>
+                                    <ComboBoxItem Content="&lt;"/>
+                                    <ComboBoxItem Content="&gt;"/>
+                                </ComboBox>
+                                <ComboBox Name="valuetable" SelectedIndex="0" SelectionChanged="valuetable_SelectionChanged"/>
+                            </StackPanel>
+                            <ListBox x:Name="UpdateListBox"  Margin="0,5,0,0" Height="148" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="150">
+
+                            </ListBox>
+                            <Button Content="Изменить" Height="30" FontSize="15" Click="Up_click" BorderThickness="0" Background="#2A2A2A" Width="150" Foreground="White"/>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem x:Name="disignerTab"   GotFocus="disignerTab_GotFocus">
+                        <TabItem.Header>
+
+                            <TextBlock>Визуальный просмотр</TextBlock>
+                        </TabItem.Header>
+                    </TabItem>
+                    <TabItem GotFocus="TabItem_GotFocus">
+                        <TabItem.Header>
+                            <TextBlock>Удаление</TextBlock>
+                        </TabItem.Header>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.RowSpan="2" >
+                            <Label FontSize="17" Content="Удалить данные" Margin="15 5 5 1" Foreground="White"/>
+                            <Label x:Name="primarykeylab"  FontSize="15" Content="Удалить по " Margin="5 5 5 5" Foreground="White"/>
+                            <TextBox x:Name="DelId" MaxLength="64" Background="Transparent" Foreground="White" BorderThickness="0,0,0,1"/>
+                            <Label FontSize="15" Content="Таблица" Margin="5 5 5 5" Foreground="White"/>
+                            <TextBox x:Name="DelidTable" MaxLength="64" BorderThickness="0,0,0,1" Background="Transparent" Foreground="White"/>
+                            <Button x:Name="Delete" Grid.Row="1" HorizontalAlignment="Center" FontSize="15" Height="28" Content="Удалить" Width="130"  Margin="0,5,0,0" Click="delete" BorderThickness="0" Background="#2A2A2A" Foreground="White" />
+                            <Button x:Name="DeleteAll" Grid.Row="1" HorizontalAlignment="Center" FontSize="15" Height="28" Content="Удалить все" Width="130"  Margin="0,5,0,0" Click="deleteAll" BorderThickness="0" Background="#2A2A2A" Foreground="White"/>
+                            <Label FontSize="15" Content="Удалить колонку" Margin="5 5 5 5" Foreground="White"/>
+                            <ComboBox x:Name="deleteColumn"  Margin="0,5,0,0" SelectionChanged="deleteColumn_SelectionChanged" Loaded="deleteColumn_Loaded">
+                            
+                            </ComboBox>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem GotFocus="TabItem_GotFocus_1" >
+                        <TabItem.Header>
+                            <TextBlock>Запрос</TextBlock>
+                        </TabItem.Header>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.RowSpan="2" x:Name="stacsql">
+                            <Label FontSize="17" Content="SQL Запрос" HorizontalAlignment="Center" Foreground="White"/>
+                            <TextBlock FontSize="13" Text="Напишите запрос нажмите на кнопку и увидите ответ" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="15,0,15,0" Foreground="White"/>
+                            <Label FontSize="15" Content="Запрос" HorizontalAlignment="Left" Margin="15,0,0,0" Foreground="White"/>
+                            <StackPanel Margin="15,0,15,10" Orientation="Horizontal">
+                                <Button Content="APK" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="30" Margin="0,0,5,0">
+                                    <Button.ToolTip>
+                                        <TextBlock>Добавить внутренний ключ</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Content="DPK" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="30" Margin="0,0,5,0">
+                                    <Button.ToolTip>
+                                        <TextBlock>удалить внутренний ключ</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Content="AFK" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="30" Margin="0,0,5,0">
+                                    <Button.ToolTip>
+                                        <TextBlock>Добавить внешний ключ</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Content="DFK" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="30" Margin="0,0,5,0">
+                                    <Button.ToolTip>
+                                        <TextBlock>Удалить внешний ключ</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Margin="15,0,15,10" Orientation="Horizontal">
+                                <Button Content="ACU" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="30" Margin="0,0,5,0">
+                                    <Button.ToolTip>
+                                        <TextBlock>Добавить уникальный ключ</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Content="DCU" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="30" Margin="0,0,5,0">
+                                    <Button.ToolTip>
+                                        <TextBlock>Удалить уникальный ключ</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
+                                
+                            </StackPanel>
+                            <TextBox x:Name="SendText" Margin="15,0,15,5" Height="105" TextWrapping="Wrap" Foreground="white" BorderThickness="0" Background="#2A2A2A">
+
+                            </TextBox>
+                            <StackPanel Orientation="Horizontal" Margin="15,0,15,5">
+                                <Button Content="S" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="20" Margin="0,0,5,0">
+                                    <Button.ToolTip>
+                                        <TextBlock>Выбрать</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Content="U" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="20" Margin="0,0,5,0">
+                                    <Button.ToolTip>
+                                        <TextBlock>Изменить</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Content="D" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="20" Margin="0,0,5,0">
+                                    <Button.ToolTip>
+                                        <TextBlock>Удалить</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Content="I" BorderThickness="0" Background="#2A2A2A" Foreground="White" Width="20" Margin="0,0,5,0">
+                                    <Button.ToolTip>
+                                        <TextBlock>Вставка</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
+                                
+                            </StackPanel>
+                            <Button Margin="15,0,15,0" Click="Send" Content="Отправить" BorderThickness="0" Background="#2A2A2A" Foreground="White"></Button>
+                        </StackPanel>
+
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <TextBlock TextWrapping="Wrap">Экстремальные настройки</TextBlock>
+                        </TabItem.Header>
+                        <StackPanel Orientation="Vertical">
+                            <Label FontSize="17" Content="Экстремальные параметры" HorizontalAlignment="Center" Foreground="White"/>
+                            <Label  Margin="15,10,15,5" Content="выбрать параметры" HorizontalAlignment="Left" Foreground="White"/>
+
+                            <ComboBox x:Name="customparam" Margin="15,10,15,5" SelectedIndex="0" SelectionChanged="customparam_Selected">
+                                <ComboBoxItem Content=""/>
+                                <ComboBoxItem Content="multiple add data"/>
+                                <ComboBoxItem Content="create store"/>
+                                
+                            </ComboBox>
+                            <StackPanel x:Name="blockcustomparam" Margin="15,10,15,5">
+                                
+                            </StackPanel>
+    
+
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <TextBlock>Профиль</TextBlock>
+                        </TabItem.Header>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="15,10,15,5">
+                            <Label Content="Данные пользователя" FontSize="15" Foreground="White"/>
+
+                            <Label Foreground="White">Имя пользоателя</Label>
+                            <TextBlock x:Name="user">root</TextBlock>
+                            <Label Foreground="White">Пароль</Label>
+                            <TextBlock x:Name="password">root</TextBlock>
+                            <Label Foreground="White">Сервер</Label>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="server">localhost</TextBlock>
+                                <TextBlock x:Name="port">:3306</TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+        <Grid>
+            <Button Content="Выход" FontSize="15" Width="100" HorizontalAlignment="Left" Height="35" Margin="20,0,0,0" Click="Exits"/>
+        </Grid>
+
+
+
+
+    </Grid>
+</Window>

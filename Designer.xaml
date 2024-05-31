@@ -1,0 +1,41 @@
+﻿<Window x:Class="Seva.Designer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Seva"
+        mc:Ignorable="d"
+        Title="Designer" Height="450" Width="800" ResizeMode="NoResize" WindowStyle="None" Background="#2A2A2A" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="1">
+            <Button x:Name="foreign" Click="foreign_Click"  Height="30" Background="Transparent" BorderThickness="0" ToolTip="Foreign key">
+                <Image Width="20" Height="20" Source="/api.png" Margin="2,2,2,2"/>
+                
+            </Button>
+            <Button Height="30" Background="Transparent" BorderThickness="0" ToolTip="Create Table" x:Name="createtable" Click="createtable_Click" >
+                <Image Width="20" Height="20"  Margin="2,2,2,2" Source="/table.png" />
+            </Button>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="0,0,10,0">
+            <Button Background="Transparent" BorderThickness="0" Click="Button_Click">
+                <Image Width="15" Height="15" Source="/square.png" />
+            </Button>
+        </StackPanel>
+        <Canvas x:Name="Canvasblock" Grid.Row="1" Grid.Column="1">
+            
+        </Canvas>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.Column="1">
+            <Button Background="#2A2A2A" Content="Назад" Width="100" Height="25" Margin="10,0,0,0" Click="Button_Click_1" Foreground="White" BorderThickness="0"></Button>
+            
+        </StackPanel>
+    </Grid>
+</Window>
