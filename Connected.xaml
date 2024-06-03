@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Seva"
         mc:Ignorable="d"
-        Title="Connected" Height="300" ResizeMode="CanResize" Width="250" Background="#2A2A2A" WindowStyle="None">
+        Title="Connected" Height="300" ResizeMode="CanResize" Width="250" Background="#2A2A2A" WindowStyle="None" Loaded="Window_Loaded">
     <Window.Resources>
         
     </Window.Resources>

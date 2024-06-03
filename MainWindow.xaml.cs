@@ -86,7 +86,7 @@ namespace Seva
                 try
                 {
                     DB dB = new DB();
-                int id = primarykeylab.Content.ToString().IndexOf("n");
+                int id = primarykeylab.Content.ToString().IndexOf("о");
                 string iden = "";
                     if(id != -1)
                     { 
@@ -923,7 +923,7 @@ namespace Seva
                     
                     while (reader.Read())
                     {
-                        primarykeylab.Content = "Delete_on " + reader.GetString("Field");
+                        primarykeylab.Content = "Удалить по " + reader.GetString("Field");
                     }
                 }
             }catch(Exception ex)

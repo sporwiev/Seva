@@ -36,7 +36,8 @@ namespace Seva
         public Connected()
         {
             InitializeComponent();
-            Process.Start("C:\\MAMP\\MAMP.exe");
+
+
 
             
             
@@ -104,6 +105,21 @@ namespace Seva
         private void Button_exit(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+            //Process.Start("C:\\MAMP\\MAMP.exe");
+            if (!new DirectoryInfo("C:\\MAMP").Exists)
+            {
+                if (MainWindow.MessageYesNo("Для использования программы нужна утилита 'MAMP'. После установки 'MAMP' перезапустите программу. Установить MAMP? \r\n https://downloads.mamp.info/MAMP-PRO-WINDOWS/releases/5.0.6/MAMP_MAMP_PRO_5.0.6.exe"))
+                {
+                    Process.Start("https://downloads.mamp.info/MAMP-PRO-WINDOWS/releases/5.0.6/MAMP_MAMP_PRO_5.0.6.exe");
+                    Connect.IsEnabled = false;
+                }
+            }
+            
         }
     }
 }

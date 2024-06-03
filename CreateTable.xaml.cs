@@ -1,7 +1,8 @@
 ﻿    using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
+using System.ComponentModel;
+using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Text;
@@ -29,10 +30,15 @@
 
 
 
-            public CreateTable()
-            {
-                    InitializeComponent();   
-            }
+        public CreateTable()
+        {
+            InitializeComponent();
+
+            comm.TextChanged += comm_TextChanged;
+
+        }
+        
+            
             bool _question = true;
             bool _new = false;
             private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -87,57 +93,58 @@
                 }
             }
             List<string> tablesname = new request().GetTables("tablesuser");
+        BackgroundWorker bw;
             private void comm_TextChanged(object sender, TextChangedEventArgs e)
             {
-                    try
+            try
+            {
+                Thread.Sleep(100);
+                foreach (var text in comm.Text.Split(' '))
+                {
+                    if (_question == true)
                     {
-                        Thread.Sleep(100);
-                        foreach (var text in comm.Text.Split(' '))
+                        for (int i = 1; i < tablesname.Count; i++)
                         {
-                            if (_question == true)
+                            string textsub = tablesname[i].ToString().Substring(0, tablesname[i].Length - 2);
+                            if (text.IndexOf(textsub) != -1)
                             {
-                                for (int i = 1; i < tablesname.Count; i++)
+                                if (MainWindow.MessageYesNo($"Вы создаете таблицу {tablesname[i]}") == true)
                                 {
-                                    string textsub = tablesname[i].ToString().Substring(0, tablesname[i].Length - 2);
-                                    if (text.IndexOf(textsub) != -1)
+                                    if (MainWindow.MessageYesNo($"Cоздать таблицу {tablesname[i]} автоматически") == true)
                                     {
-                                        if (MainWindow.MessageYesNo($"Вы создаете таблицу {tablesname[i]}") == true)
-                                        {
-                                            if (MainWindow.MessageYesNo($"Cоздать таблицу {tablesname[i]} автоматически") == true)
-                                            {
-                                                Create(tablesname[i], new DB().getConnection().Database);
-                                                new MainWindow().Show();
-                                            }
-
-                                            break;
-
-                                        }
-                                        else
-                                        {
-                                            _question = false;
-                                            _new = true;
-                                        }
-
+                                        Create(tablesname[i], new DB().getConnection().Database);
+                                        new MainWindow().Show();
                                     }
-                                    else
-                                    {
-                                        _new = true;
-                                    }
+
+                                    break;
+
                                 }
+                                else
+                                {
+                                    _question = false;
+                                    _new = true;
+                                }
+
                             }
                             else
                             {
-                                break;
+                                _new = true;
                             }
                         }
-
-
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        MainWindow.MessageError(ex.Message);
+                        break;
                     }
+                }
+
+
             }
+            catch (Exception ex)
+            {
+                MainWindow.MessageError(ex.Message);
+            }
+        }
             private async void Create(string nametable,string database)
             {
                 try

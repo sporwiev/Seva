@@ -154,7 +154,7 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Создать таблицу" FontSize="30" Grid.Row="1" Foreground="White"/>
-        <TextBox x:Name="comm" Margin="10" Grid.Row="2" Grid.ColumnSpan="2" Background="Transparent" BorderThickness="0" FontSize="20" Text="CREATE TABLE"  Foreground="White" TextChanged="comm_TextChanged" KeyDown="comm_KeyDown"></TextBox>
+        <TextBox x:Name="comm" Margin="10" Grid.Row="2" Grid.ColumnSpan="2" Background="Transparent" BorderThickness="0" FontSize="20" Text="CREATE TABLE"  Foreground="White" KeyDown="comm_KeyDown"></TextBox>
         <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="15,0,0,0">
             <Button x:Name="cancel" Content="Назад" VerticalAlignment="Center" Width="100" Background="#636363" Margin="0,0,10,0" Foreground="White" Click="cancel_Click"/>
             <Button x:Name="create" Content="Создать" VerticalAlignment="Center" Width="100" Background="#636363" Foreground="White" Click="create_Click"/>

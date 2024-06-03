@@ -11,7 +11,7 @@
     <Grid>
             
         <StackPanel Margin="15">
-            <TextBlock Text="Select Database" Foreground="White" FontSize="20" Margin="5"/>
+            <TextBlock Text="Выбор базы данных" Foreground="White" FontSize="20" Margin="5"/>
             <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="5" Height="250" >
                 <StackPanel HorizontalAlignment="Left" Orientation="Vertical" x:Name="glavstack" Width="430">
                     
